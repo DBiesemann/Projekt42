@@ -6,11 +6,15 @@
 
 package projekt42;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -21,18 +25,22 @@ public class Projekt42 extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction((ActionEvent event) -> {
-            System.out.println("Hello World!");
-        });
+        primaryStage.setFullScreen(true);
+        
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
         StackPane root = new StackPane();
-        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
+        Rectangle background = new Rectangle(screenSize.getWidth(),screenSize.getHeight(),Color.BLUE);
+        root.getChildren().add(background);
         
-        primaryStage.setTitle("Hello World!");
+        Rectangle textBox = new Rectangle(screenSize.getWidth()-100,screenSize.getHeight()/7,Color.INDIGO);
+        textBox.setTranslateY((screenSize.getHeight()-textBox.getHeight())/2.0-10.0);
+        root.getChildren().add(textBox);
+        
+        Scene scene = new Scene(root, 800, 600);
+        
+        primaryStage.setTitle("Projekt 42");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
