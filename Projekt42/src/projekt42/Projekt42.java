@@ -9,6 +9,7 @@ package projekt42;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javafx.application.Application;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -38,6 +39,7 @@ public class Projekt42 extends Application {
         textBox.addTextList(new String[]{"Mit [Enter] kann man einen Text weiter kommen...","Dies ist ein etwas längerer Text als vorhin!","Dies ist eine langer String mit\neinem Escape dazwischen","Diese Schriftart heißt \"Mistral\""});
         
         Scene scene = new Scene(root, 800, 600);
+        scene.setCursor(new ImageCursor(new Image(Projekt42.class.getResource("images/maus.png").toString())));
         
         primaryStage.setTitle("Projekt 42");
         primaryStage.setScene(scene);
