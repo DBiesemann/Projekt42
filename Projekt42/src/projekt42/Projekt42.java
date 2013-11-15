@@ -9,17 +9,14 @@ package projekt42;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
  *
- * @author namibj
+ * @author namibj , larcado
  */
 public class Projekt42 extends Application {
     
@@ -31,12 +28,14 @@ public class Projekt42 extends Application {
         
         StackPane root = new StackPane();
         
-        Rectangle background = new Rectangle(screenSize.getWidth(),screenSize.getHeight(),Color.BLUE);
+        Background background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/dungeon2.jpg").toString()));
         root.getChildren().add(background);
         
-        Rectangle textBox = new Rectangle(screenSize.getWidth()-100,screenSize.getHeight()/7,Color.INDIGO);
-        textBox.setTranslateY((screenSize.getHeight()-textBox.getHeight())/2.0-10.0);
+        TextBox textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
+        textBox.setTranslateY((screenSize.getHeight()-textBox.height)/2.0);
         root.getChildren().add(textBox);
+        
+        textBox.addTextList(new String[]{"Mit [Enter] kann man einen Text weiter kommen...","Dies ist ein etwas längerer Text als vorhin!","Dies ist eine langer String mit\neinem Escape dazwischen","Diese Schriftart heißt \"Mistral\""});
         
         Scene scene = new Scene(root, 800, 600);
         
