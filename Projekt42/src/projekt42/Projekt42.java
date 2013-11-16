@@ -6,33 +6,42 @@
 
 package projekt42;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
  *
- * @author namibj
+ * @author namibj , larcado
  */
 public class Projekt42 extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction((ActionEvent event) -> {
-            System.out.println("Hello World!");
-        });
+        primaryStage.setFullScreen(true);
+        
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
         StackPane root = new StackPane();
-        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
+        Background background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/dungeon2.jpg").toString()));
+        root.getChildren().add(background);
         
-        primaryStage.setTitle("Hello World!");
+        TextBox textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
+        textBox.setTranslateY((screenSize.getHeight()-textBox.height)/2.0);
+        root.getChildren().add(textBox);
+        
+        textBox.addTextList(new String[]{"Mit [Enter] kann man einen Text weiter kommen...","Dies ist ein etwas längerer Text als vorhin!","Dies ist eine langer String mit\neinem Escape dazwischen","Diese Schriftart heißt \"Mistral\""});
+        
+        Scene scene = new Scene(root, 800, 600);
+        scene.setCursor(new ImageCursor(new Image(Projekt42.class.getResource("images/maus.png").toString())));
+        
+        primaryStage.setTitle("Projekt 42");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
