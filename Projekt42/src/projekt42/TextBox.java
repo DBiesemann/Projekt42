@@ -17,7 +17,7 @@ public class TextBox extends StackPane{
     private TextArea ta = new TextArea();
     private utils.List<String> textQueue = new utils.List<>();
     public double width,height;
-    private int maxZeichen,maxZeilen;
+    private int maxZeichen,maxZeilen,fontSize;
     
     public TextBox(double pWidth, double pHeight){        
         width=pWidth;
@@ -25,15 +25,20 @@ public class TextBox extends StackPane{
         this.setPrefSize(width, height);
         this.setMaxSize(width, height);
         
-        maxZeichen=(int)(width/17.0);
-        maxZeilen=(int)(height/77.0);
+        fontSize=(int)(height/3.6);
+        
+        maxZeichen=(int)(width/(fontSize/2.5));
+        maxZeilen=(int)(height/fontSize/1.8);
+        
+        //maxZeichen=(int)(width/18.0);
+        //maxZeilen=(int)(height/75.0);
         
         label.setStyle("-fx-text-fill:goldenrod;"
-                     + "-fx-font-size: 50;"
-                     + "-fx-font-family: 'mistral','serif'");
+                     + "-fx-font-size: "+fontSize+";"
+                     + "-fx-font-family: 'monotype corsiva','mistral','serif'");
         
         this.setStyle("-fx-background-color: rgba(0,100,100,0.5);"
-                    + "-fx-background-radius:25;");
+                    + "-fx-background-radius:"+(int)(width/height)+";");
         
                 
         
@@ -48,6 +53,15 @@ public class TextBox extends StackPane{
         });
         
         this.getChildren().addAll(ta,label);
+    }
+    
+    public void displayTextNow(String content){
+        if(content!="" || content!=null)
+            for(String str:trimString(content)){
+                if(str!="" || str!=null)
+                    textQueue.vorneAnhängen(str);
+            }
+        update();
     }
     
     public void addText(String content){
@@ -80,7 +94,7 @@ public class TextBox extends StackPane{
     private String[] trimString(String toSet){
         String newS = "";
 
-        if(toSet.length()>(int)(width/17.0)){
+        if(toSet.length()>maxZeichen){
             String[] split = toSet.split(" ");
             toSet="";
             int i=0;

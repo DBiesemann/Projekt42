@@ -15,6 +15,17 @@ public class List<E>{
         return kenntErstes;
     }
     
+    public void vorneAnhängen(E pE){
+        if(kenntErstes==null){
+            kenntErstes=new ListElement<>(pE);
+        }
+        else{
+            ListElement<E> listElement = new ListElement<>(pE);
+            listElement.kenntNachfolger=kenntErstes;
+            kenntErstes=listElement;
+        }
+    }
+    
     public void hinzufügen(E pE){
         if(kenntErstes==null){
             kenntErstes=new ListElement<>(pE);
