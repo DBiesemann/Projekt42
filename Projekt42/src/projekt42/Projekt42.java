@@ -32,7 +32,7 @@ public class Projekt42 extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         
         background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/start.png").toString()));
         root.getChildren().add(background);
