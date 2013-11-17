@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * @author namibj , larcado
  */
 public class Projekt42 extends Application {
-    
+    static TextBox textBox;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setFullScreen(true);
@@ -32,7 +32,7 @@ public class Projekt42 extends Application {
         Background background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/dungeon2.jpg").toString()));
         root.getChildren().add(background);
         
-        TextBox textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
+        textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
         textBox.setTranslateY((screenSize.getHeight()-textBox.height)/2.0);
         root.getChildren().add(textBox);
         
