@@ -8,12 +8,15 @@ package projekt42;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import projekt42.places.Loader;
 
 /**
  *
@@ -21,29 +24,42 @@ import javafx.stage.Stage;
  */
 public class Projekt42 extends Application {
     
+    final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    StackPane root = new StackPane();
+    Scene scene = new Scene(root, 800, 600);
+    public static Background background;
+    public static TextBox textBox;
+    
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         
-        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
-        StackPane root = new StackPane();
-        
-        Background background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/dungeon2.jpg").toString()));
+        background = new Background(screenSize.getWidth(),screenSize.getHeight(),new Image(Projekt42.class.getResource("images/start.png").toString()));
         root.getChildren().add(background);
         
-        TextBox textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
+        textBox = new TextBox(screenSize.getWidth()-100,screenSize.getHeight()/7);
         textBox.setTranslateY((screenSize.getHeight()-textBox.height)/2.0);
         root.getChildren().add(textBox);
         
-        textBox.addTextList(new String[]{"Mit [Enter] kann man einen Text weiter kommen...","Dies ist ein etwas längerer Text als vorhin!","Dies ist eine langer String mit\neinem Escape dazwischen","Diese Schriftart heißt \"Mistral\""});
+        textBox.addTextList(new String[]{"Das Spiel startet in 10s"});
         
-        Scene scene = new Scene(root, 800, 600);
         scene.setCursor(new ImageCursor(new Image(Projekt42.class.getResource("images/maus.png").toString())));
         
         primaryStage.setTitle("Projekt 42");
         primaryStage.setScene(scene);
         primaryStage.show();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Projekt42.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        setPlace("firstRoom.dat");
+    }
+    
+    private void setPlace(String f){
+        Loader loader = new Loader(f);
+        loader.setPlace();
     }
 
     /**

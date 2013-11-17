@@ -24,9 +24,16 @@ public class List<E>{
         }
     }
     
+    public void entferneErstesElement(){
+        if(kenntErstes!=null){
+            kenntErstes=kenntErstes.kenntNachfolger;
+        }
+    }
+    
     public boolean entfernen(E pE){
         if(kenntErstes!=null){
             kenntErstes = kenntErstes.entfernen(pE);
+            return true;
         }
         return false;
     }
