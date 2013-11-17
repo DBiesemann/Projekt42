@@ -3,6 +3,7 @@ package utils;
 /**
  *
  * @author larcado , namibj
+ * @param <E> Der Objekttyp, der in dem Stack aufgenommen werden soll.
  */
 public class Stack<E> {
 
@@ -39,8 +40,8 @@ public class Stack<E> {
     //------------------------------------------------------
     public class StackElement<T> {
 
-        private StackElement<T> kenntNachfolger;
-        private T kenntContent;
+        private final StackElement<T> kenntNachfolger;
+        private final T kenntContent;
 
         private StackElement(T pE, StackElement<T> nachfolger) {
             kenntContent = pE;

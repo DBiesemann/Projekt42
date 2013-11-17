@@ -3,6 +3,7 @@ package utils;
 /**
  *
  * @author larcado , namibj
+ * @param <E> Der Objekttyp, der in der Liste aufgenommen werden soll. Er muss Comparable<E> implementieren, um die Sortierung zu ermöglichen.
  */
 public class SortedList<E extends Comparable<E>>{
     private ListElement<E> kenntErstes;
@@ -44,7 +45,7 @@ public class SortedList<E extends Comparable<E>>{
     //------------------------------------------------------
     public class ListElement<T extends Comparable<T>>{
         private ListElement<T> kenntNachfolger;
-        private T kenntContent;
+        private final T kenntContent;
 
         private ListElement(T pE) {
             kenntContent = pE;

@@ -3,6 +3,7 @@ package utils;
 /**
  *
  * @author larcado , namibj
+ * @param <E> Der Objekttyp, der in der Liste aufgenommen werden soll.
  */
 public class List<E>{
     private ListElement<E> kenntErstes;
@@ -51,7 +52,7 @@ public class List<E>{
     //------------------------------------------------------
     public class ListElement<T>{
         private ListElement<T> kenntNachfolger;
-        private T kenntContent;
+        private final T kenntContent;
 
         private ListElement(T pE) {
             kenntContent = pE;
@@ -60,7 +61,7 @@ public class List<E>{
 
         private void haengeAn(T pE) {
             if(kenntNachfolger==null){
-                kenntNachfolger=new ListElement<T>(pE);
+                kenntNachfolger=new ListElement<>(pE);
             }else{
                 kenntNachfolger.haengeAn(pE);
             }
