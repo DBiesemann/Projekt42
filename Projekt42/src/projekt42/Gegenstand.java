@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 public enum Gegenstand {
 
     /**
-     *Ein Domo-Dings, nur um die Struktur für das Einfügen zu zeigen.
+     *Ein Demo-Dings, nur um die Struktur für das Einfügen zu zeigen.
      */
     KOERPER_1("Körper", ""),
 
@@ -25,7 +25,7 @@ public enum Gegenstand {
     LEICHE_1("",""),
 
     /**
-     *Das dritte Demo-Dings.,
+     *Das dritte Demo-Dings.
      */
     SCHLUESSEL_1("Ein Schlüssel.", "schluessel1");
     Image defaultImage;
