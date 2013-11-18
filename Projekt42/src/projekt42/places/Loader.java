@@ -49,27 +49,27 @@ public class Loader {
                         Projekt42.textBox.clear();
                         Projekt42.textBox.addTextList(textbox);
                         break;
-                    case "gegenstand"://1=name | 2=xPos in % | 3=yPos in % | 4=größe in %
+                    case "gegenstand"://1=name | 2=img
                         Gegenstand g = Gegenstand.valueOf(splited[1]);
-                        ImageView imgView = g.getImageView("keyTestScene");
+                        ImageView imgView = g.getImageView(splited[2]);
                         
-                        double x = Integer.parseInt(splited[2])-50.0;
-                        double y = Integer.parseInt(splited[3])-50.0;
+                        //double x = Integer.parseInt(splited[2])-50.0;
+                        //double y = Integer.parseInt(splited[3])-50.0;
                         
-                        double size = (Projekt42.gameSize.width/100.0)*Integer.parseInt(splited[4]);
-                        imgView.setFitWidth(size);
-                        imgView.setFitHeight(size);
+                        //double size = (Projekt42.gameSize.width/100.0)*Integer.parseInt(splited[4]);
+                        imgView.setFitWidth(Projekt42.gameSize.width);
+                        imgView.setFitHeight(Projekt42.gameSize.height);
                         
-                        imgView.setTranslateX((Projekt42.gameSize.width/100.0)*x);
-                        imgView.setTranslateY((Projekt42.gameSize.height/100.0)*y);
+                        //imgView.setTranslateX((Projekt42.gameSize.width/100.0)*x);
+                        //imgView.setTranslateY((Projekt42.gameSize.height/100.0)*y);
                         
                         Projekt42.root.getChildren().add(imgView);
                         
                         Label tooltip = new Label();
                         tooltip.setText(g.getToolTip());
                         tooltip.setLabelFor(imgView);
-                        tooltip.setTranslateX((Projekt42.gameSize.width/100.0)*x);
-                        tooltip.setTranslateY((Projekt42.gameSize.height/100.0)*y-imgView.getFitHeight()/2.0);
+                        //tooltip.setTranslateX((Projekt42.gameSize.width/100.0)*x);
+                        //tooltip.setTranslateY((Projekt42.gameSize.height/100.0)*y-imgView.getFitHeight()/2.0);
                         tooltip.setStyle("-fx-text-fill:goldenrod;"
                                         + "-fx-font-size: 20;"
                                         + "-fx-font-family: 'monotype corsiva','mistral','serif'");
@@ -79,6 +79,9 @@ public class Loader {
                         imgView.setOnMouseEntered((MouseEvent e) ->{
                             if(imgView.isVisible())
                                 tooltip.setVisible(true);
+                            
+                                tooltip.setTranslateX(e.getSceneX()-20);
+                                tooltip.setTranslateY(e.getSceneY()-80);
                         });
                         imgView.setOnMouseExited((MouseEvent e) ->{
                             if(imgView.isVisible())

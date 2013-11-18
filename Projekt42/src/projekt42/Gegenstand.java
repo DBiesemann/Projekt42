@@ -28,7 +28,7 @@ public enum Gegenstand {
     /**
      * Das dritte Demo-Dings.
      */
-    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene");
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene", "keyEbene");
     Image defaultImage;
     Image[] roomImages;
     HashMap<String, Image> Images;

@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -27,7 +28,7 @@ public class Projekt42 extends Application {
     
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     public static Dimension gameSize;
-    public static StackPane root = new StackPane();
+    public static Group root = new Group();
     Scene scene = new Scene(root, 800, 450, Color.BLACK);
     public static Background background;
     public static TextBox textBox;
@@ -39,13 +40,14 @@ public class Projekt42 extends Application {
         int gameY = (int)((screenSize.width*9.0)/16.0);
         gameSize = new Dimension(screenSize.width,gameY);
         
-        root.setBackground(javafx.scene.layout.Background.EMPTY);
+        //root.setBackground(javafx.scene.layout.Background.EMPTY);
         
         background = new Background(gameSize.getWidth(),gameSize.getHeight(),new Image(Projekt42.class.getResource("images/start.png").toString()));
         root.getChildren().add(background);
         
         textBox = new TextBox(gameSize.getWidth()-100,gameSize.getHeight()/6);
-        textBox.setTranslateY((gameSize.getHeight()-textBox.height)/2.0);
+        textBox.setTranslateX(gameSize.getWidth()/2.0-textBox.width/2.0);
+        textBox.setTranslateY(gameSize.getHeight()-textBox.height);
         root.getChildren().add(textBox);
         
         textBox.addTextList(new String[]{"Das Spiel startet in 2s"});
