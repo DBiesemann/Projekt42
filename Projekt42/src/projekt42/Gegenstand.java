@@ -5,6 +5,8 @@
  */
 package projekt42;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,24 +20,26 @@ public enum Gegenstand {
     /**
      * Ein Demo-Dings, nur um die Struktur für das Einfügen zu zeigen.
      */
-    KOERPER_1("Körper", "Ein Körper.", "", false),
+    KOERPER_1("Körper", "Ein Körper.", false),
     /**
      * Noch nen Demo-Dings.
      */
-    LEICHE_1("", "", "", false),
+    LEICHE_1("", "", false),
     /**
      * Das dritte Demo-Dings.
      */
-    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", "key.png", true, "key");
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene");
     Image defaultImage;
     Image[] roomImages;
+    HashMap<String, Image> Images;
     String name, tip;
-private final boolean toTakeAway;
-    
-    Gegenstand(String Name, String tooltip, String pathDefaultImg, boolean ToTakeAway, String... pathsRoomImages) {
-        defaultImage = new Image(Gegenstand.class.getResource("images/" + pathDefaultImg).toString(), false);
-        for (int i = 0; 1 < pathsRoomImages.length; i++) {
-            roomImages[i] = new Image(Gegenstand.class.getResource("images/" + pathsRoomImages + i + ".png").toString(), false);
+    private final boolean toTakeAway;
+
+    Gegenstand(String Name, String tooltip/*, String pathDefaultImg*/, boolean ToTakeAway, String... pImages) {
+        Images = new HashMap<>(pImages.length, 1.0f);
+        for (String cur : pImages) {
+            Images.put(cur,
+                    new Image(Gegenstand.class.getResource("images/" + cur + ".png").toString(), false));
         }
         tip = tooltip;
         name = Name;
@@ -43,19 +47,45 @@ private final boolean toTakeAway;
 
     }
 
-    public ImageView getImageView(int version) {
+    public ImageView getImageView(String key) {
         ImageView imgView;
-        if (version < 0) {
-            imgView = new ImageView(defaultImage);
+        if (key.endsWith("Inv")) {
+            imgView = new ImageView(Images.get(key));
             imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-            imgView.setUserData(true);
+            imgView.setOnMouseDragged((event) -> {
+                imgView.translateXProperty().set(event.getSceneX());
+                imgView.translateYProperty().set(event.getSceneY());
+            });
         } else {
-            imgView = new ImageView(roomImages[version]);
-            if(toTakeAway)
+            imgView = new ImageView(Images.get(key));
+            if (toTakeAway) {
                 imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-            imgView.setUserData(true);
+                imgView.setOnMouseMoved(new javafx.event.EventHandler<MouseEvent>() {
+
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (Boolean.TRUE.equals(imgView.getUserData())) {
+                            imgView.setTranslateX(event.getSceneX()-Projekt42.gameSize.width);
+                            imgView.setTranslateY(event.getSceneY()-Projekt42.gameSize.height);
+                        }
+                        int x =1;
+                        x++;
+                    }
+                });
+                imgView.setOnMousePressed(new javafx.event.EventHandler<MouseEvent>() {
+
+                    public void handle(MouseEvent event) {
+                        imgView.setUserData(Boolean.TRUE);
+                    }
+                });
+                imgView.setOnMouseReleased(new javafx.event.EventHandler<MouseEvent>() {
+
+                    public void handle(MouseEvent event) {
+                        imgView.setUserData(Boolean.FALSE);
+                    }
+                });
+            }
         }
-        imgView.set
         return imgView;
     }
 
