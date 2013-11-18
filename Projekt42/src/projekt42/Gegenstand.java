@@ -38,8 +38,6 @@ public enum Gegenstand {
     }
     
     public ImageView getImageView(){
-        ImageView imgView = new ImageView(defaultImage);
-        
         return new ImageView(defaultImage);
     }
     
