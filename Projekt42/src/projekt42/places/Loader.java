@@ -51,7 +51,7 @@ public class Loader {
                         break;
                     case "gegenstand"://1=name | 2=xPos in % | 3=yPos in % | 4=größe in %
                         Gegenstand g = Gegenstand.valueOf(splited[1]);
-                        ImageView imgView = g.getImageView();
+                        ImageView imgView = g.getImageView("keyTestScene");
                         
                         double x = Integer.parseInt(splited[2])-50.0;
                         double y = Integer.parseInt(splited[3])-50.0;
@@ -84,11 +84,11 @@ public class Loader {
                             if(imgView.isVisible())
                                 tooltip.setVisible(false);
                         });
-                        imgView.setOnMouseClicked((MouseEvent e) ->{
-                            imgView.setVisible(false);
-                            tooltip.setVisible(false);
-                            Projekt42.textBox.displayTextNow("Du hast ein "+g.getName()+" eingesammelt.");
-                        });
+                        /* imgView.setOnMouseClicked((MouseEvent e) ->{
+                        imgView.setVisible(false);
+                        tooltip.setVisible(false);
+                        Projekt42.textBox.displayTextNow("Du hast ein "+g.getName()+" eingesammelt.");
+                        });*/
                         break;
                     default:
                         break;

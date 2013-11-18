@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package projekt42;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -16,37 +18,83 @@ import javafx.scene.image.ImageView;
 public enum Gegenstand {
 
     /**
-     *Ein Demo-Dings, nur um die Struktur für das Einfügen zu zeigen.
+     * Ein Demo-Dings, nur um die Struktur für das Einfügen zu zeigen.
      */
-    KOERPER_1("Körper","Ein Körper.",""),
-
+    KOERPER_1("Körper", "Ein Körper.", false),
     /**
-     *Noch nen Demo-Dings.
+     * Noch nen Demo-Dings.
      */
-    LEICHE_1("","",""),
-
+    LEICHE_1("", "", false),
     /**
-     *Das dritte Demo-Dings.
+     * Das dritte Demo-Dings.
      */
-    SCHLUESSEL_1("Schlüssel","Ein Schlüssel.", "key.png");
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene");
     Image defaultImage;
-    String name,tip;
-    Gegenstand(String Name, String tooltip, String pathDefaultImg){
-        defaultImage = new Image(Gegenstand.class.getResource("images/"+pathDefaultImg).toString(), false);
-        tip=tooltip;
-        name=Name;
+    Image[] roomImages;
+    HashMap<String, Image> Images;
+    String name, tip;
+    private final boolean toTakeAway;
+
+    Gegenstand(String Name, String tooltip/*, String pathDefaultImg*/, boolean ToTakeAway, String... pImages) {
+        Images = new HashMap<>(pImages.length, 1.0f);
+        for (String cur : pImages) {
+            Images.put(cur,
+                    new Image(Gegenstand.class.getResource("images/" + cur + ".png").toString(), false));
+        }
+        tip = tooltip;
+        name = Name;
+        toTakeAway = ToTakeAway;
+
     }
-    
-    public ImageView getImageView(){
-        return new ImageView(defaultImage);
+
+    public ImageView getImageView(String key) {
+        ImageView imgView;
+        if (key.endsWith("Inv")) {
+            imgView = new ImageView(Images.get(key));
+            imgView.setOnDragDetected((event) -> imgView.startFullDrag());
+            imgView.setOnMouseDragged((event) -> {
+                imgView.translateXProperty().set(event.getSceneX());
+                imgView.translateYProperty().set(event.getSceneY());
+            });
+        } else {
+            imgView = new ImageView(Images.get(key));
+            if (toTakeAway) {
+                imgView.setOnDragDetected((event) -> imgView.startFullDrag());
+                imgView.setOnMouseMoved(new javafx.event.EventHandler<MouseEvent>() {
+
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (Boolean.TRUE.equals(imgView.getUserData())) {
+                            imgView.setTranslateX(event.getSceneX()-Projekt42.gameSize.width);
+                            imgView.setTranslateY(event.getSceneY()-Projekt42.gameSize.height);
+                        }
+                        int x =1;
+                        x++;
+                    }
+                });
+                imgView.setOnMousePressed(new javafx.event.EventHandler<MouseEvent>() {
+
+                    public void handle(MouseEvent event) {
+                        imgView.setUserData(Boolean.TRUE);
+                    }
+                });
+                imgView.setOnMouseReleased(new javafx.event.EventHandler<MouseEvent>() {
+
+                    public void handle(MouseEvent event) {
+                        imgView.setUserData(Boolean.FALSE);
+                    }
+                });
+            }
+        }
+        return imgView;
     }
-    
-    public String getToolTip(){
+
+    public String getToolTip() {
         return tip;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    
+
 }
