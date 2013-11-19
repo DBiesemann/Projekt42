@@ -26,4 +26,8 @@ public class Inventar {
         Gegenstand[] alles = (Gegenstand[]) inventar.toArray();
         return alles;
     }
+    
+    public Gegenstand getFromIndex(int i){
+        return inventar.get(i);
+    }
 }
