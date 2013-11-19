@@ -6,7 +6,6 @@
 package projekt42;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -60,28 +59,22 @@ public enum Gegenstand {
             imgView = new ImageView(Images.get(key));
             if (toTakeAway) {
                 imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-                imgView.setOnMouseMoved(new javafx.event.EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (Boolean.TRUE.equals(imgView.getUserData())) {
-                            imgView.setTranslateX(event.getSceneX()-Projekt42.gameSize.width);
-                            imgView.setTranslateY(event.getSceneY()-Projekt42.gameSize.height);
-                        }
-                        int x =1;
-                        x++;
-                    }
-                });
                 imgView.setOnMousePressed(new javafx.event.EventHandler<MouseEvent>() {
 
                     public void handle(MouseEvent event) {
-                        imgView.setUserData(Boolean.TRUE);
+                        imgView.translateXProperty().bind(Projekt42.mouseX.subtract(Projekt42.root.sceneToLocal(
+                                event.getSceneX(), event.getSceneY()).getX()));
+                        imgView.translateYProperty().bind(Projekt42.mouseY.subtract(Projekt42.root.sceneToLocal(
+                                event.getSceneX(), event.getSceneY()).getY()));
                     }
                 });
                 imgView.setOnMouseReleased(new javafx.event.EventHandler<MouseEvent>() {
 
                     public void handle(MouseEvent event) {
-                        imgView.setUserData(Boolean.FALSE);
+                        imgView.translateXProperty().unbind();
+                        imgView.translateYProperty().unbind();
+                        imgView.translateXProperty().set(0);
+                        imgView.translateYProperty().set(0);
                     }
                 });
             }
