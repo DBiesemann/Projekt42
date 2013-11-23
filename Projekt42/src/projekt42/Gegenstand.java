@@ -59,23 +59,17 @@ public enum Gegenstand {
             imgView = new ImageView(Images.get(key));
             if (toTakeAway) {
                 imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-                imgView.setOnMousePressed(new javafx.event.EventHandler<MouseEvent>() {
-
-                    public void handle(MouseEvent event) {
-                        imgView.translateXProperty().bind(Projekt42.mouseX.subtract(Projekt42.root.sceneToLocal(
-                                event.getSceneX(), event.getSceneY()).getX()));
-                        imgView.translateYProperty().bind(Projekt42.mouseY.subtract(Projekt42.root.sceneToLocal(
-                                event.getSceneX(), event.getSceneY()).getY()));
-                    }
+                imgView.setOnMousePressed((MouseEvent event) -> {
+                    imgView.translateXProperty().bind(Projekt42.mouseX.subtract(Projekt42.root.sceneToLocal(
+                            event.getSceneX(), event.getSceneY()).getX()));
+                    imgView.translateYProperty().bind(Projekt42.mouseY.subtract(Projekt42.root.sceneToLocal(
+                            event.getSceneX(), event.getSceneY()).getY()));
                 });
-                imgView.setOnMouseReleased(new javafx.event.EventHandler<MouseEvent>() {
-
-                    public void handle(MouseEvent event) {
-                        imgView.translateXProperty().unbind();
-                        imgView.translateYProperty().unbind();
-                        imgView.translateXProperty().set(0);
-                        imgView.translateYProperty().set(0);
-                    }
+                imgView.setOnMouseReleased((MouseEvent event) -> {
+                    imgView.translateXProperty().unbind();
+                    imgView.translateYProperty().unbind();
+                    imgView.translateXProperty().set(0);
+                    imgView.translateYProperty().set(0);
                 });
             }
         }
