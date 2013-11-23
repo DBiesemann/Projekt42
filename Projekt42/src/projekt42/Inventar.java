@@ -1,12 +1,13 @@
 package projekt42;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author larcado
  */
-public class Inventar {
+public class Inventar implements Serializable{
     
     ArrayList<Gegenstand> inventar = new ArrayList<>();
     
