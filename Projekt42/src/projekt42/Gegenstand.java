@@ -59,31 +59,26 @@ public enum Gegenstand {
         } else {
             imgView = new ImageView(Images.get(key));
             if (toTakeAway) {
+                imgView.setOnMouseDragged((MouseEvent event) -> {
+                    imgView.setTranslateX(event.getSceneX() - Projekt42.gameSize.width*0.84);
+                    imgView.setTranslateY(event.getSceneY() - Projekt42.gameSize.height*0.675);
+                });
+                /*
                 imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-                imgView.setOnMouseMoved(new javafx.event.EventHandler<MouseEvent>() {
-
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (Boolean.TRUE.equals(imgView.getUserData())) {
-                            imgView.setTranslateX(event.getSceneX()-Projekt42.gameSize.width);
-                            imgView.setTranslateY(event.getSceneY()-Projekt42.gameSize.height);
-                        }
-                        int x =1;
-                        x++;
+                imgView.setOnMouseMoved((MouseEvent event) -> {
+                    if (Boolean.TRUE.equals(imgView.getUserData())) {
+                        imgView.setTranslateX(event.getSceneX());
+                        imgView.setTranslateY(event.getSceneY());
                     }
+                    int x =1;
+                    x++;
                 });
-                imgView.setOnMousePressed(new javafx.event.EventHandler<MouseEvent>() {
-
-                    public void handle(MouseEvent event) {
-                        imgView.setUserData(Boolean.TRUE);
-                    }
+                imgView.setOnMousePressed((MouseEvent event) -> {
+                    imgView.setUserData(Boolean.TRUE);
                 });
-                imgView.setOnMouseReleased(new javafx.event.EventHandler<MouseEvent>() {
-
-                    public void handle(MouseEvent event) {
-                        imgView.setUserData(Boolean.FALSE);
-                    }
-                });
+                imgView.setOnMouseReleased((MouseEvent event) -> {
+                    imgView.setUserData(Boolean.FALSE);
+                });*/
             }
         }
         return imgView;
