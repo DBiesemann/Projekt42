@@ -26,12 +26,12 @@ import projekt42.places.Loader;
  */
 public class Projekt42 extends Application {
 
-    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    public static Dimension gameSize;
+    public static Dimension gameSize = Toolkit.getDefaultToolkit().getScreenSize();
     public static Group root = new Group();
     Scene scene = new Scene(root, 800, 450, Color.BLACK);
     public static Background background;
     public static TextBox textBox;
+    public static Inventar inventar;
     static DoubleProperty mouseX = new SimpleDoubleProperty();
     static DoubleProperty mouseY = new SimpleDoubleProperty();
 
@@ -39,17 +39,16 @@ public class Projekt42 extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setFullScreen(true);
 
-        int gameY = (int) ((screenSize.width * 9.0) / 16.0);
-        gameSize = new Dimension(screenSize.width, gameY);
-
-        //root.setBackground(javafx.scene.layout.Background.EMPTY);
         background = new Background(gameSize.getWidth(), gameSize.getHeight(), new Image(Projekt42.class.getResource("images/start.png").toString()));
         root.getChildren().add(background);
 
-        textBox = new TextBox(gameSize.getWidth() - 100, gameSize.getHeight() / 6);
-        textBox.setTranslateX(gameSize.getWidth() / 2.0 - textBox.width / 2.0);
-        textBox.setTranslateY(gameSize.getHeight() - textBox.height);
+        textBox = new TextBox(gameSize.getWidth()-gameSize.getWidth()/10.0, gameSize.getHeight()/6.0);
+        textBox.setTranslateX(gameSize.getWidth()/80.0);
+        textBox.setTranslateY(gameSize.getHeight()-textBox.height);
         root.getChildren().add(textBox);
+        
+        inventar = new Inventar();
+        root.getChildren().add(inventar);
 
         textBox.addTextList(new String[]{"Das Spiel startet in 2s"});
 
