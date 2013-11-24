@@ -6,7 +6,6 @@
 package projekt42;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -65,20 +64,18 @@ public enum Gegenstand {
                 });
                 /*
                 imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-                imgView.setOnMouseMoved((MouseEvent event) -> {
-                    if (Boolean.TRUE.equals(imgView.getUserData())) {
-                        imgView.setTranslateX(event.getSceneX());
-                        imgView.setTranslateY(event.getSceneY());
-                    }
-                    int x =1;
-                    x++;
-                });
                 imgView.setOnMousePressed((MouseEvent event) -> {
-                    imgView.setUserData(Boolean.TRUE);
+                    imgView.translateXProperty().bind(Projekt42.mouseX.subtract(Projekt42.root.sceneToLocal(
+                            event.getSceneX(), event.getSceneY()).getX()));
+                    imgView.translateYProperty().bind(Projekt42.mouseY.subtract(Projekt42.root.sceneToLocal(
+                            event.getSceneX(), event.getSceneY()).getY()));
                 });
                 imgView.setOnMouseReleased((MouseEvent event) -> {
-                    imgView.setUserData(Boolean.FALSE);
-                });*/
+                    imgView.translateXProperty().unbind();
+                    imgView.translateYProperty().unbind();
+                    imgView.translateXProperty().set(0);
+                    imgView.translateYProperty().set(0);
+                });
             }
         }
         return imgView;
