@@ -18,7 +18,7 @@ import javafx.scene.input.TransferMode;
  */
 public class Inventar extends Group implements Serializable{
     
-    ArrayList<Gegenstand> inventar = new ArrayList<>();
+    ArrayList<InvItem> inventar = new ArrayList<>();
     ImageView gui, symbol;
     final Image inv = new Image(Inventar.class.getResource("images/inv.png").toString());
     final Image invOpen = new Image(Inventar.class.getResource("images/invOpen.png").toString());
@@ -44,7 +44,7 @@ public class Inventar extends Group implements Serializable{
         this.getChildren().add(symbol);
         
         symbol.setOnMouseReleased((MouseEvent e) ->{
-            gui.setVisible(!gui.isVisible());
+            clicked();
         });
         
         symbol.setOnDragOver((DragEvent event) -> {
@@ -73,7 +73,7 @@ public class Inventar extends Group implements Serializable{
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(DataFormat.RTF)) {
-                inventar.add((Gegenstand) db.getContent(DataFormat.RTF));
+                addGegenstand((Gegenstand) db.getContent(DataFormat.RTF));
                 success = true;
                 System.out.println(inventar.toString());
             }
@@ -84,11 +84,13 @@ public class Inventar extends Group implements Serializable{
     }
     
     public void addGegenstand(Gegenstand g){
-        inventar.add(g);
+        InvItem i = new InvItem(g,g.getImageView(g.name+"Inv"));
+        inventar.add(i);
+        this.getChildren().add(i.imageView);
     }
     
     public void entferneGegenstand(Gegenstand g){
-        inventar.remove(g);
+        //inventar.remove(g);
     }
     
     public Gegenstand[] getAlleGegenstände(){
@@ -97,6 +99,24 @@ public class Inventar extends Group implements Serializable{
     }
     
     public Gegenstand getFromIndex(int i){
-        return inventar.get(i);
+        return inventar.get(i).gegenstand;
+    }
+
+    private void clicked() {
+        gui.setVisible(!gui.isVisible());
+        for(InvItem it:inventar){
+            it.imageView.setVisible(!it.imageView.isVisible());
+        }
+    }
+    
+    private class InvItem{
+        public Gegenstand gegenstand;
+        public ImageView imageView;
+        
+        public InvItem(Gegenstand g, ImageView i){
+            gegenstand=g;
+            imageView=i;
+            imageView.setVisible(false);
+        }
     }
 }
