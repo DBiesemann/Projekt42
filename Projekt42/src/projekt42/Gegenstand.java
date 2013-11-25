@@ -8,12 +8,8 @@ package projekt42;
 import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import utils.GenericDoubleDouble;
 
 /**
  *
@@ -32,7 +28,7 @@ public enum Gegenstand {
     /**
      * Das dritte Demo-Dings.
      */
-    SCHLUESSEL_1("key", "Ein Schlüssel.", true, "keyInv", "keyTestScene", "keyEbene");
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene", "keyEbene");
     Image defaultImage;
     Image[] roomImages;
     HashMap<String, Image> Images;
@@ -51,62 +47,45 @@ public enum Gegenstand {
 
     }
 
+    @SuppressWarnings("Unchecked")
     public ImageView getImageView(String key) {
         ImageView imgView;
         if (key.endsWith("Inv")) {
             imgView = new ImageView(Images.get(key));
             imgView.setOnDragDetected((event) -> imgView.startFullDrag());
             imgView.setOnMouseDragged((event) -> {
-                imgView.translateXProperty().set(event.getSceneX());
-                imgView.translateYProperty().set(event.getSceneY());
+                imgView.setTranslateX(event.getSceneX());
+                imgView.setTranslateY(event.getSceneY());
             });
         } else {
             imgView = new ImageView(Images.get(key));
             if (toTakeAway) {
-                
-                /*
-                imgView.setOnMouseDragged((MouseEvent event) -> {
-                    imgView.setTranslateX(event.getSceneX() - Projekt42.gameSize.width*0.84);
-                    imgView.setTranslateY(event.getSceneY() - Projekt42.gameSize.height*0.675);
-                    imgView.setOpacity(0.5);
+                imgView.setOnDragDetected(event -> imgView.startFullDrag());
+                imgView.setOnMousePressed((MouseEvent event) -> {
+                    double x = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
+                    double y = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY();
+                    imgView.setUserData(new GenericDoubleDouble<>(this, x, y));
                 });
-                
-                imgView.setOnMouseReleased((MouseEvent event) -> {
+                imgView.setOnMouseDragged(event -> {
+                    imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
+                    imgView.setTranslateX(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
+                });
+                imgView.setOnMouseReleased(event -> {
+                    imgView.setUserData(null);
                     imgView.translateXProperty().unbind();
                     imgView.translateYProperty().unbind();
                     imgView.translateXProperty().set(0);
                     imgView.translateYProperty().set(0);
                     imgView.setOpacity(1);
-                });*/
-                
-                imgView.setOnDragDetected((MouseEvent event) -> {
-                    Dragboard db = imgView.startDragAndDrop(TransferMode.ANY);
-
-                    ClipboardContent content = new ClipboardContent();
-                    content.put(DataFormat.RTF, this);
-                    db.setContent(content);
-                    
-                    imgView.setOpacity(0.5);
-
-                    event.consume();
                 });
-                
-                imgView.setOnDragOver((DragEvent event) -> {
-                    imgView.setTranslateX(event.getSceneX() - Projekt42.gameSize.width*0.84);
-                    imgView.setTranslateY(event.getSceneY() - Projekt42.gameSize.height*0.675);
+                imgView.setOnMouseDragEntered(event -> {
+                    //TODO: Add code to support higlighting of Objects when dragging other ones over.
                 });
-
-                imgView.setOnDragDone((DragEvent event) -> {
-                    if (event.getTransferMode() == TransferMode.MOVE) {
-                        imgView.setVisible(false);
-                    }else{
-                        imgView.translateXProperty().unbind();
-                        imgView.translateYProperty().unbind();
-                        imgView.translateXProperty().set(0);
-                        imgView.translateYProperty().set(0);
-                        imgView.setOpacity(1);
-                    }
-                    event.consume();
+                imgView.setOnMouseDragExited(event -> {
+                    //TODO: Add code to handle the end of animations/highlighting of this after dragging Stuff over it.
+                });
+                imgView.setOnMouseDragReleased(event -> {
+                    //TODO: Add code to support dragging Stuff onto this Object.
                 });
             }
         }
