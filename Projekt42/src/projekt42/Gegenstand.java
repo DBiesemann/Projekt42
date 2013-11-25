@@ -65,18 +65,18 @@ public enum Gegenstand {
                     double x = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
                     double y = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY();
                     imgView.setUserData(new GenericDoubleDouble<>(this, x, y));
+                    imgView.setMouseTransparent(true);
                 });
                 imgView.setOnMouseDragged(event -> {
                     imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
-                    imgView.setTranslateX(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
+                    imgView.setTranslateY(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
                 });
                 imgView.setOnMouseReleased(event -> {
                     imgView.setUserData(null);
-                    imgView.translateXProperty().unbind();
-                    imgView.translateYProperty().unbind();
-                    imgView.translateXProperty().set(0);
-                    imgView.translateYProperty().set(0);
+                    imgView.setTranslateX(0);
+                    imgView.setTranslateY(0);
                     imgView.setOpacity(1);
+                    imgView.setMouseTransparent(false);
                 });
                 imgView.setOnMouseDragEntered(event -> {
                     //TODO: Add code to support higlighting of Objects when dragging other ones over.

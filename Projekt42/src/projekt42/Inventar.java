@@ -56,15 +56,15 @@ public class Inventar extends Group implements Serializable {
         });
 
         symbol.setOnMouseDragReleased(event -> {
-            addGegenstand(((GenericDoubleDouble<Gegenstand>)((Node) event.getGestureSource()).getUserData()).getObj());
-            //Projekt42.root.   //TODO: Mach mal Tobi.
+            addGegenstand(((GenericDoubleDouble<Gegenstand>) ((Node) event.getGestureSource()).getUserData()).getObj());
+            Projekt42.root.getChildren().remove(event.getGestureSource());
             System.out.println(inventar.toString());
             event.consume();
         });
     }
 
     public void addGegenstand(Gegenstand g) {
-        InvItem i = new InvItem(g, g.getImageView("Inv"));
+        InvItem i = new InvItem(g, g.getImageView(g.name + "Inv"));
         inventar.add(i);
         this.getChildren().add(i.imageView);
     }
