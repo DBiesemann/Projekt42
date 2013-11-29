@@ -3,82 +3,84 @@ package utils;
 /**
  *
  * @author larcado , namibj
- * @param <E> Der Objekttyp, der in der Liste aufgenommen werden soll. Er muss Comparable<E> implementieren, um die Sortierung zu ermöglichen.
+ * @param <E> Der Objekttyp, der in der Liste aufgenommen werden soll. Er muss
+ * Comparable<E> implementieren, um die Sortierung zu ermöglichen.
  */
-public class SortedList<E extends Comparable<E>>{
+public class SortedList<E extends Comparable<E>> {
+
     private ListElement<E> kenntErstes;
-    
-    public SortedList(){
-        kenntErstes=null;
+
+    public SortedList() {
+        kenntErstes = null;
     }
-    
-    public ListElement<E> getFirst(){
+
+    public ListElement<E> getFirst() {
         return kenntErstes;
     }
-    
-    public void hinzufügen(E pE){
-        if(kenntErstes==null){
-            kenntErstes=new ListElement<>(pE);
-        }
-        else{
+
+    public void hinzufügen(E pE) {
+        if (kenntErstes == null) {
+            kenntErstes = new ListElement<>(pE);
+        } else {
             kenntErstes = kenntErstes.haengeAn(pE);
         }
     }
-    
-    public boolean entfernen(E pE){
-        if(kenntErstes!=null){
+
+    public boolean entfernen(E pE) {
+        if (kenntErstes != null) {
             kenntErstes = kenntErstes.entfernen(pE);
         }
         return false;
     }
-    
-    public boolean alleEntfernen(){
-        if(kenntErstes!=null){
+
+    public boolean alleEntfernen() {
+        if (kenntErstes != null) {
             kenntErstes = null;
             return true;
         }
         return false;
     }
-    
+
     //------------------------------------------------------
     //-------------ListElement------------------------------
     //------------------------------------------------------
-    public class ListElement<T extends Comparable<T>>{
+    public class ListElement<T extends Comparable<T>> {
+
         private ListElement<T> kenntNachfolger;
         private final T kenntContent;
 
         private ListElement(T pE) {
             kenntContent = pE;
-            kenntNachfolger=null;
+            kenntNachfolger = null;
         }
 
         private ListElement<T> haengeAn(T pE) {
-            if(pE.compareTo(kenntContent)>0){
-                if(kenntNachfolger != null){
+            if (pE.compareTo(kenntContent) > 0) {
+                if (kenntNachfolger != null) {
                     kenntNachfolger = kenntNachfolger.haengeAn(pE);
-                }else{
+                } else {
                     kenntNachfolger = new ListElement<>(pE);
                 }
-            }else{
+            } else {
                 ListElement<T> pElement = new ListElement<>(pE);
                 pElement.kenntNachfolger = this;
                 return pElement;
             }
             return this;
         }
-        
-        public ListElement<T> getNachfolger(){
+
+        public ListElement<T> getNachfolger() {
             return kenntNachfolger;
         }
-        
-        public T getContent(){
+
+        public T getContent() {
             return kenntContent;
         }
-        
-        public ListElement<T> entfernen(T pE){
-            if(getContent().equals(pE)){
+
+        public ListElement<T> entfernen(T pE) {
+            if (getContent().equals(pE)) {
                 return kenntNachfolger;
-            }else{
+            } else {
                 kenntNachfolger = kenntNachfolger.entfernen(pE);
                 return this;
             }

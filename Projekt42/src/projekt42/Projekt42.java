@@ -32,6 +32,7 @@ public class Projekt42 extends Application {
     public static Background background;
     public static TextBox textBox;
     public static Inventar inventar;
+    public static Group Gegenstaende = new Group();
     static DoubleProperty mouseX = new SimpleDoubleProperty();
     static DoubleProperty mouseY = new SimpleDoubleProperty();
 
@@ -41,12 +42,13 @@ public class Projekt42 extends Application {
 
         background = new Background(gameSize.getWidth(), gameSize.getHeight(), new Image(Projekt42.class.getResource("images/start.png").toString()));
         root.getChildren().add(background);
+        root.getChildren().add(Gegenstaende);
 
-        textBox = new TextBox(gameSize.getWidth()-gameSize.getWidth()/10.0, gameSize.getHeight()/6.0);
-        textBox.setTranslateX(gameSize.getWidth()/80.0);
-        textBox.setTranslateY(gameSize.getHeight()-textBox.height);
+        textBox = new TextBox(gameSize.getWidth() - gameSize.getWidth() / 10.0, gameSize.getHeight() / 6.0);
+        textBox.setTranslateX(gameSize.getWidth() / 80.0);
+        textBox.setTranslateY(gameSize.getHeight() - textBox.height);
         root.getChildren().add(textBox);
-        
+
         inventar = new Inventar();
         root.getChildren().add(inventar);
 
