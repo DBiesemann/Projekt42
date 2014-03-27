@@ -19,12 +19,12 @@ public class Inventar extends Group implements Serializable {
     ArrayList<InvItem> inventar = new ArrayList<>();
     ImageView gui, symbol;
     Group items = new Group();
-    final Image inv = new Image(Inventar.class.getResource("images/inv.png").toString());
-    final Image invOpen = new Image(Inventar.class.getResource("images/invOpen.png").toString());
+    final Image inv = new Image(Inventar.class.getResource("images/beutel zu.png").toString());
+    final Image invOpen = new Image(Inventar.class.getResource("images/beutel offen.png").toString());
 
     @SuppressWarnings("Unchecked")
     public Inventar() {
-        gui = new ImageView(new Image(Inventar.class.getResource("images/invGUI.png").toString()));
+        gui = new ImageView(new Image(Inventar.class.getResource("images/Inventar.png").toString()));
         Dimension gameSize = Projekt42.gameSize;
 
         gui.setFitWidth(gameSize.width - gameSize.width / 5);
