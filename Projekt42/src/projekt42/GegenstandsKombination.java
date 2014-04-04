@@ -11,7 +11,7 @@ package projekt42;
  */
 public enum GegenstandsKombination {
 
-    bla(false, Gegenstand.SCHLUESSEL_1, Gegenstand.LEICHE_1, () -> Projekt42.textBox.addText("Es passiert nichts, was du nicht erwartest."));
+    bla(false, Gegenstand.TUCH, Gegenstand.KNOCHEN, () -> Projekt42.textBox.addText("Es passiert nichts, was du nicht erwartest."));
     Gegenstand source, target;
     final boolean TargetIsInventory;
     Runnable Action;

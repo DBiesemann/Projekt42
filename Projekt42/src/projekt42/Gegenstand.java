@@ -6,6 +6,7 @@
 package projekt42;
 
 import java.util.HashMap;
+import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -17,25 +18,23 @@ import utils.GenericDoubleDouble;
  */
 public enum Gegenstand {
 
-    /**
-     * Ein Demo-Dings, nur um die Struktur für das Einfügen zu zeigen.
-     */
-    KOERPER_1("Körper", "Ein Körper.", false),
-    /**
-     * Noch nen Demo-Dings.
-     */
-    LEICHE_1("", "", false),
-    /**
-     * Das dritte Demo-Dings.
-     */
-    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, "keyInv", "keyTestScene", "keyEbene");
-    Image defaultImage;
+    KNOCHEN("raum_1/Knochen", "Ein Knochen.", false, new String[]{"Der ist heiß", "Ich sollte ihn nicht anfassen", "Ich brauche etwas um ihn aus dem Feuer zu holen"}, "raum_1/Knochen", "raum_1/Knochen_Inv"),
+
+    TUCH("raum_1/Tuch", "Ein Tuch.", true, new String[]{"Ein Tuch, das könnte nützlich sein"}, "raum_1/Tuch", "raum_1/Tuch_Inv"),
+    
+    TÜR("raum_1/Tür", "Eine Tür.", false, new String[]{"Die Tür ist verschlossen"}, "raum_1/Tür"),
+
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, new String[]{"Ein goldener Schlüssel..."}, "keyInv", "keyTestScene", "keyEbene");
+    Random rand = new Random();
     Image[] roomImages;
     HashMap<String, Image> Images;
-    String name, tip;
-    private final boolean toTakeAway;
+    String name, tip, firstImageName;
+    String[] textboxinfo;
+    private boolean toTakeAway;
 
-    Gegenstand(String Name, String tooltip/*, String pathDefaultImg*/, boolean ToTakeAway, String... pImages) {
+    Gegenstand(String Name, String tooltip, boolean ToTakeAway, String[] tboxInfo, String... pImages) {
+        firstImageName = pImages[0];
+        textboxinfo = tboxInfo;
         Images = new HashMap<>(pImages.length, 1.0f);
         for (String cur : pImages) {
             Images.put(cur,
@@ -53,41 +52,61 @@ public enum Gegenstand {
         if (key.endsWith("Inv")) {
             imgView = new ImageView(Images.get(key));
             imgView.setOnDragDetected((event) -> imgView.startFullDrag());
-            imgView.setOnMouseDragged((event) -> {
-                imgView.setTranslateX(event.getSceneX());
-                imgView.setTranslateY(event.getSceneY());
+            imgView.setOnMousePressed((MouseEvent event) -> {
+                double x = event.getSceneX() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
+                double y = event.getSceneY() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY();
+                imgView.setUserData(new GenericDoubleDouble<>(this, x, y));
+                imgView.setMouseTransparent(true);
+            });
+            imgView.setOnMouseDragged(event -> {
+                imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
+                imgView.setTranslateY(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
+            });
+            imgView.setOnMouseReleased(event -> {
+                imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
+                imgView.setTranslateY(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
+                imgView.setUserData(null);
+                imgView.setOpacity(1);
+                imgView.setMouseTransparent(false);
             });
         } else {
             imgView = new ImageView(Images.get(key));
-            if (toTakeAway) {
-                imgView.setOnDragDetected(event -> imgView.startFullDrag());
-                imgView.setOnMousePressed((MouseEvent event) -> {
+            imgView.setOnDragDetected(event -> imgView.startFullDrag());
+            imgView.setOnMousePressed((MouseEvent event) -> {
+                if(toTakeAway){
                     double x = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
                     double y = Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY();
                     imgView.setUserData(new GenericDoubleDouble<>(this, x, y));
                     imgView.setMouseTransparent(true);
-                });
-                imgView.setOnMouseDragged(event -> {
+                }
+            });
+            imgView.setOnMouseDragged(event -> {
+                if(toTakeAway){
                     imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
                     imgView.setTranslateY(event.getSceneY() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getJ());
-                });
-                imgView.setOnMouseReleased(event -> {
+                }
+            });
+            imgView.setOnMouseReleased(event -> {
+                Projekt42.textBox.clear();
+                Projekt42.textBox.addText(textboxinfo[rand.nextInt(textboxinfo.length)]);
+                if(toTakeAway){
                     imgView.setUserData(null);
                     imgView.setTranslateX(0);
                     imgView.setTranslateY(0);
                     imgView.setOpacity(1);
                     imgView.setMouseTransparent(false);
-                });
-                imgView.setOnMouseDragEntered(event -> {
-                    //TODO: Add code to support higlighting of Objects when dragging other ones over.
-                });
-                imgView.setOnMouseDragExited(event -> {
-                    //TODO: Add code to handle the end of animations/highlighting of this after dragging Stuff over it.
-                });
-                imgView.setOnMouseDragReleased(event -> {
-                    //TODO: Add code to support dragging Stuff onto this Object.
-                });
-            }
+                }
+            });
+            /*
+            imgView.setOnMouseDragEntered(event -> {
+                //TODO: Add code to support higlighting of Objects when dragging other ones over.
+            });
+            imgView.setOnMouseDragExited(event -> {
+                //TODO: Add code to handle the end of animations/highlighting of this after dragging Stuff over it.
+            });
+            imgView.setOnMouseDragReleased(event -> {
+                //TODO: Add code to support dragging Stuff onto this Object.
+            });*/
         }
         return imgView;
     }
@@ -99,5 +118,12 @@ public enum Gegenstand {
     public String getName() {
         return name;
     }
-
+    
+    public String getFirstImageName() {
+        return firstImageName;
+    }
+    
+    public void enableToTakeAway(){
+        toTakeAway = true;
+    }
 }

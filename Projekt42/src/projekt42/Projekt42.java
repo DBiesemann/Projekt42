@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import projekt42.places.Loader;
+import projekt42.places.*;
 
 /**
  *
@@ -33,6 +34,7 @@ public class Projekt42 extends Application {
     public static TextBox textBox;
     public static Inventar inventar;
     public static Group Gegenstaende = new Group();
+    public static Loader loader = new Loader();
     static DoubleProperty mouseX = new SimpleDoubleProperty();
     static DoubleProperty mouseY = new SimpleDoubleProperty();
 
@@ -68,12 +70,7 @@ public class Projekt42 extends Application {
             Logger.getLogger(Projekt42.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        setPlace("firstRoom.dat");
-    }
-
-    private void setPlace(String f) {
-        Loader loader = new Loader(f);
-        loader.setPlace();
+        loader.setPlace(new Raum_1());
     }
 
     /**

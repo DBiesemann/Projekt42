@@ -21,20 +21,23 @@ public class Inventar extends Group implements Serializable {
     Group items = new Group();
     final Image inv = new Image(Inventar.class.getResource("images/beutel zu.png").toString());
     final Image invOpen = new Image(Inventar.class.getResource("images/beutel offen.png").toString());
+    private Dimension gameSize;
 
     @SuppressWarnings("Unchecked")
     public Inventar() {
         gui = new ImageView(new Image(Inventar.class.getResource("images/Inventar.png").toString()));
-        Dimension gameSize = Projekt42.gameSize;
+        gameSize = Projekt42.gameSize;
 
         gui.setFitWidth(gameSize.width - gameSize.width / 5);
         gui.setFitHeight(gameSize.height - gameSize.height / 5);
         gui.setTranslateX(gameSize.width / 10);
         gui.setTranslateY(gameSize.height / 10);
+        gui.setOpacity(0.98);
         this.getChildren().add(gui);
         this.getChildren().add(items);
 
         gui.setVisible(false);
+        items.setVisible(false);
 
         symbol = new ImageView(inv);
 
@@ -70,13 +73,15 @@ public class Inventar extends Group implements Serializable {
     }
 
     public void addGegenstand(Gegenstand g) {
-        InvItem i = new InvItem(g, g.getImageView(g.name + "Inv"));
+        InvItem i = new InvItem(g, g.getImageView(g.name+"_Inv"));
         inventar.add(i);
         items.getChildren().add(i.imageView);
+        refreshInventar();
     }
 
     public void entferneGegenstand(Gegenstand g) {
         //inventar.remove(g);
+        refreshInventar();
     }
 
     public Gegenstand[] getAlleGegenstände() {
@@ -91,6 +96,15 @@ public class Inventar extends Group implements Serializable {
     private void clicked() {
         gui.setVisible(!gui.isVisible());
         items.setVisible(!items.isVisible());
+    }
+    
+    private void refreshInventar(){
+        for(InvItem item:inventar){
+            item.imageView.setFitWidth(gui.getFitHeight()/7);
+            item.imageView.setFitHeight(gui.getFitHeight()/7);
+            item.imageView.setTranslateX(gui.getTranslateX()+item.imageView.getFitWidth()*2.3);
+            item.imageView.setTranslateY(gui.getTranslateY()+item.imageView.getFitHeight());
+        }
     }
 
     private class InvItem {
