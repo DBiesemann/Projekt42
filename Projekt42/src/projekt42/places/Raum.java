@@ -11,10 +11,10 @@ import projekt42.Gegenstand;
 
 /**
  *
- * @author Tobias
+ * @author larcado
  */
 abstract class Raum {
-    public Image background;
-    public Gegenstand[] gegenstände;
-    public String[] textbox;
+    public abstract Image getBackground();
+    public abstract Gegenstand[] getGegenstände();
+    public abstract String[] getTextbox();
 }

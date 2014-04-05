@@ -5,13 +5,22 @@
  */
 package projekt42;
 
+import projekt42.places.Raum_2;
+
 /**
  *
  * @author namibj
  */
 public enum GegenstandsKombination {
 
-    bla(false, Gegenstand.TUCH, Gegenstand.KNOCHEN, () -> Projekt42.textBox.addText("Es passiert nichts, was du nicht erwartest."));
+    Tuch_Knochen(false, Gegenstand.TUCH, Gegenstand.KNOCHEN, () -> {
+        System.out.println("Knochen - Tuch Event");
+        Gegenstand.KNOCHEN.enableToTakeAway();
+            }),
+    Knochen_Tür(false, Gegenstand.KNOCHEN, Gegenstand.TÜR, () -> {
+        System.out.println("Knochen - Tür Event");
+        Projekt42.loader.setPlace(new Raum_2());
+            });
     Gegenstand source, target;
     final boolean TargetIsInventory;
     Runnable Action;
@@ -29,7 +38,15 @@ public enum GegenstandsKombination {
         this.Action = Action;
     }
 
-    void doAction() {
+    public void doAction() {
         Action.run();
+    }
+    
+    public Gegenstand getSource(){
+        return source;
+    }
+    
+    public Gegenstand getTarget(){
+        return target;
     }
 }

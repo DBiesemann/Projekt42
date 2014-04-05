@@ -49,12 +49,14 @@ public class Projekt42 extends Application {
         textBox = new TextBox(gameSize.getWidth() - gameSize.getWidth() / 10.0, gameSize.getHeight() / 6.0);
         textBox.setTranslateX(gameSize.getWidth() / 80.0);
         textBox.setTranslateY(gameSize.getHeight() - textBox.height);
+        textBox.setVisible(false);
         root.getChildren().add(textBox);
 
         inventar = new Inventar();
+        inventar.symbol.setVisible(false);
         root.getChildren().add(inventar);
 
-        textBox.addTextList(new String[]{"Das Spiel startet in 2s"});
+        //textBox.addTextList(new String[]{"Das Spiel startet in 2s"});
 
         scene.setCursor(new ImageCursor(new Image(Projekt42.class.getResource("images/maus.png").toString())));
         root.setOnMouseDragged((event) -> {
@@ -69,7 +71,9 @@ public class Projekt42 extends Application {
         } catch (InterruptedException ex) {
             Logger.getLogger(Projekt42.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        inventar.symbol.setVisible(true);
+        textBox.setVisible(true);
+        textBox.clear();
         loader.setPlace(new Raum_1());
     }
 

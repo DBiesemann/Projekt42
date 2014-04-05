@@ -1,6 +1,11 @@
 package projekt42;
 
 import java.util.ArrayList;
+import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TimelineBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -17,7 +22,8 @@ public class TextBox extends StackPane {
     private TextArea ta = new TextArea();
     private utils.List<String> textQueue = new utils.List<>();
     public double width, height;
-    private int maxZeichen, maxZeilen, fontSize;
+    private final int maxZeichen, maxZeilen, fontSize;
+    private long lasttime=0;
 
     public TextBox(double pWidth, double pHeight) {
         width = pWidth;
@@ -49,6 +55,24 @@ public class TextBox extends StackPane {
         });
 
         this.getChildren().addAll(ta, label);
+        
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long tnow = System.currentTimeMillis();
+                if(label.getText()!=""){
+                    if(tnow>lasttime+5000){
+                        textQueue.entferneErstesElement();
+                        update();
+                    }
+                }
+            }
+        };
+        
+        timer.start();
     }
 
     public void displayTextNow(String content) {
@@ -151,6 +175,7 @@ public class TextBox extends StackPane {
     private void update() {
         if (textQueue.getFirst() != null) {
             label.setText(textQueue.getFirst().getContent());
+            lasttime=System.currentTimeMillis();
         } else {
             label.setText("");
         }

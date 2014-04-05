@@ -13,20 +13,20 @@ import projekt42.Gegenstand;
  *
  * @author larcado
  */
-public class Raum_1 extends Raum{
+public class Raum_2 extends Raum{
 
     @Override
     public Image getBackground() {
-        return new Image(projekt42.Projekt42.class.getResource("images/raum_1/Raum_1.png").toString());
+        return new Image(projekt42.Projekt42.class.getResource("images/raum_2/Raum_2.png").toString());
     }
 
     @Override
     public Gegenstand[] getGegenstände() {
-        return new Gegenstand[]{Gegenstand.TÜR, Gegenstand.KNOCHEN, Gegenstand.TUCH};
+        return new Gegenstand[]{Gegenstand.TÜR};
     }
 
     @Override
     public String[] getTextbox() {
-        return null;
+        return new String[]{"Raum 2"};
     }
 }

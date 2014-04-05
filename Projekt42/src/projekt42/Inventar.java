@@ -22,6 +22,7 @@ public class Inventar extends Group implements Serializable {
     final Image inv = new Image(Inventar.class.getResource("images/beutel zu.png").toString());
     final Image invOpen = new Image(Inventar.class.getResource("images/beutel offen.png").toString());
     private Dimension gameSize;
+    public boolean isInventarDrag = false;
 
     @SuppressWarnings("Unchecked")
     public Inventar() {
@@ -52,23 +53,45 @@ public class Inventar extends Group implements Serializable {
         });
 
         symbol.setOnMouseDragEntered(event -> {
-            symbol.setImage(invOpen);
-            event.consume();
+            if(!isInventarDrag){
+                symbol.setImage(invOpen);
+                event.consume();
+            }else{
+                gui.setVisible(!gui.isVisible());
+                if(!gui.isVisible()){
+                    setAllItemsVisible(false);
+                    ((Node) event.getGestureSource()).setVisible(true);
+                }else{
+                    setAllItemsVisible(true);
+                }
+            }
         });
 
         symbol.setOnMouseDragExited(event -> {
-            symbol.setImage(inv);
-            event.consume();
+            if(!isInventarDrag){
+                symbol.setImage(inv);
+                event.consume();
+            }
         });
 
-        symbol.setOnMouseEntered(event -> symbol.setImage(invOpen));
-        symbol.setOnMouseExited(event -> symbol.setImage(inv));
+        symbol.setOnMouseEntered(event -> {
+            if(!isInventarDrag){
+                symbol.setImage(invOpen);
+            }
+        });
+        symbol.setOnMouseExited(event -> {
+            if(!isInventarDrag){
+                symbol.setImage(inv);
+            }
+        });
 
         symbol.setOnMouseDragReleased(event -> {
-            addGegenstand(((GenericDoubleDouble<Gegenstand>) ((Node) event.getGestureSource()).getUserData()).getObj());
-            Projekt42.Gegenstaende.getChildren().remove((Node) event.getGestureSource());
-            System.out.println(inventar.toString());
-            event.consume();
+            if(!isInventarDrag){
+                addGegenstand(((GenericDoubleDouble<Gegenstand>) ((Node) event.getGestureSource()).getUserData()).getObj());
+                Projekt42.Gegenstaende.getChildren().remove((Node) event.getGestureSource());
+                System.out.println(inventar.toString());
+                event.consume();
+            }
         });
     }
 
@@ -104,6 +127,15 @@ public class Inventar extends Group implements Serializable {
             item.imageView.setFitHeight(gui.getFitHeight()/7);
             item.imageView.setTranslateX(gui.getTranslateX()+item.imageView.getFitWidth()*2.3);
             item.imageView.setTranslateY(gui.getTranslateY()+item.imageView.getFitHeight());
+        }
+    }
+    
+    public void setAllItemsVisible(boolean vi){
+        ImageView[] it = new ImageView[items.getChildren().size()];
+        items.getChildren().toArray(it);
+        
+        for(ImageView iview:it){
+            iview.setVisible(vi);
         }
     }
 

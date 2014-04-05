@@ -7,6 +7,8 @@ package projekt42;
 
 import java.util.HashMap;
 import java.util.Random;
+import javafx.scene.Node;
+import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -14,17 +16,26 @@ import utils.GenericDoubleDouble;
 
 /**
  *
- * @author namibj
+ * @author namibj , larcado
  */
 public enum Gegenstand {
 
-    KNOCHEN("raum_1/Knochen", "Ein Knochen.", false, new String[]{"Der ist heiß", "Ich sollte ihn nicht anfassen", "Ich brauche etwas um ihn aus dem Feuer zu holen"}, "raum_1/Knochen", "raum_1/Knochen_Inv"),
+    KNOCHEN("raum_1/Knochen", "Ein Knochen.", false,
+            new String[]{"Der ist heiß", "Ich sollte ihn nicht anfassen", "Ich brauche etwas um ihn aus dem Feuer zu holen"},
+            "raum_1/Knochen", "raum_1/Knochen_Inv"),
 
-    TUCH("raum_1/Tuch", "Ein Tuch.", true, new String[]{"Ein Tuch, das könnte nützlich sein"}, "raum_1/Tuch", "raum_1/Tuch_Inv"),
+    TUCH("raum_1/Tuch", "Ein Tuch.", true,
+            new String[]{"Ein Tuch, das könnte nützlich sein"},
+            "raum_1/Tuch", "raum_1/Tuch_Inv"),
     
-    TÜR("raum_1/Tür", "Eine Tür.", false, new String[]{"Die Tür ist verschlossen"}, "raum_1/Tür"),
+    TÜR("raum_1/Tür", "Eine Tür.", false,
+            new String[]{"Die Tür ist verschlossen"},
+            "raum_1/Tür"),
 
-    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, new String[]{"Ein goldener Schlüssel..."}, "keyInv", "keyTestScene", "keyEbene");
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true,
+            new String[]{"Ein goldener Schlüssel..."},
+            "keyInv", "keyTestScene", "keyEbene");
+    
     Random rand = new Random();
     Image[] roomImages;
     HashMap<String, Image> Images;
@@ -49,14 +60,15 @@ public enum Gegenstand {
     @SuppressWarnings("Unchecked")
     public ImageView getImageView(String key) {
         ImageView imgView;
+        imgView = new ImageView(Images.get(key));
         if (key.endsWith("Inv")) {
-            imgView = new ImageView(Images.get(key));
             imgView.setOnDragDetected((event) -> imgView.startFullDrag());
             imgView.setOnMousePressed((MouseEvent event) -> {
-                double x = event.getSceneX() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX();
-                double y = event.getSceneY() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY();
+                double x = event.getSceneX() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getX() + imgView.getFitWidth()/2;
+                double y = event.getSceneY() - Projekt42.root.sceneToLocal(event.getSceneX(), event.getSceneY()).getY() + imgView.getFitHeight()/2;
                 imgView.setUserData(new GenericDoubleDouble<>(this, x, y));
                 imgView.setMouseTransparent(true);
+                Projekt42.inventar.isInventarDrag = true;
             });
             imgView.setOnMouseDragged(event -> {
                 imgView.setTranslateX(event.getSceneX() - ((GenericDoubleDouble<Gegenstand>) imgView.getUserData()).getI());
@@ -68,9 +80,14 @@ public enum Gegenstand {
                 imgView.setUserData(null);
                 imgView.setOpacity(1);
                 imgView.setMouseTransparent(false);
+                
+                Projekt42.inventar.isInventarDrag = false;
+                Projekt42.inventar.setAllItemsVisible(true);
+                if(!Projekt42.inventar.gui.isVisible()){
+                    Projekt42.inventar.items.setVisible(false);
+                }
             });
         } else {
-            imgView = new ImageView(Images.get(key));
             imgView.setOnDragDetected(event -> imgView.startFullDrag());
             imgView.setOnMousePressed((MouseEvent event) -> {
                 if(toTakeAway){
@@ -97,16 +114,54 @@ public enum Gegenstand {
                     imgView.setMouseTransparent(false);
                 }
             });
-            /*
+
             imgView.setOnMouseDragEntered(event -> {
-                //TODO: Add code to support higlighting of Objects when dragging other ones over.
+                if(Projekt42.inventar.isInventarDrag){
+                    imgView.setCache(true);
+                    Bloom bloom = new Bloom();
+                    bloom.setThreshold(0.1);
+                    imgView.setEffect(bloom);
+                    event.consume();
+                }
             });
+
             imgView.setOnMouseDragExited(event -> {
-                //TODO: Add code to handle the end of animations/highlighting of this after dragging Stuff over it.
+                if(Projekt42.inventar.isInventarDrag){
+                    imgView.setEffect(null);
+                    event.consume();
+                }
             });
+            
             imgView.setOnMouseDragReleased(event -> {
-                //TODO: Add code to support dragging Stuff onto this Object.
-            });*/
+                if(Projekt42.inventar.isInventarDrag){
+                    Gegenstand g = ((GenericDoubleDouble<Gegenstand>) ((Node) event.getGestureSource()).getUserData()).getObj();
+                    imgView.setEffect(null);
+                    boolean match = false;
+                    for(GegenstandsKombination kombi:GegenstandsKombination.values()){
+                        if(kombi.getSource().equals(g)){
+                            if(kombi.getTarget().equals(this)){
+                                kombi.doAction();
+                                match  = true;
+                            }
+                        }
+                    }
+                    if(!match){
+                        Projekt42.textBox.addText("Dies hat keine Wirkung hier...");
+                    }
+                }
+                event.consume();
+            });
+
+            imgView.setOnMouseEntered(event -> {
+                if(Projekt42.inventar.isInventarDrag){
+                    
+                }
+            });
+            imgView.setOnMouseExited(event -> {
+                if(Projekt42.inventar.isInventarDrag){
+                    
+                }
+            });
         }
         return imgView;
     }
