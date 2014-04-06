@@ -17,14 +17,19 @@ public enum GegenstandsKombination {
 
     Tuch_Knochen(false, Gegenstand.TUCH, Gegenstand.KNOCHEN, () -> {
         System.out.println("Knochen - Tuch Event");
-        Gegenstand.KNOCHEN.enableToTakeAway();
-        Projekt42.Gegenstaende.getChildren().remove(2);//Index = 2, weil der Knochen im Laden als zweites hinzugefügt wurde in die Group
-        Projekt42.Gegenstaende.getChildren().add(Gegenstand.KNOCHEN.getImageView(Gegenstand.KNOCHEN.name));
+        if(!Gegenstand.KNOCHEN.isToTakeAway()){
+            Gegenstand.KNOCHEN.enableToTakeAway();
+            Projekt42.Gegenstaende.getChildren().remove(2);//Index = 2, weil der Knochen im Laden als zweites hinzugefügt wurde in die Group
+            Projekt42.Gegenstaende.getChildren().add(Gegenstand.KNOCHEN.getImageView(Gegenstand.KNOCHEN.name));
+            Gegenstand.KNOCHEN.textboxinfo = new String[]{"Jetzt kann ich ihn anfassen"};
+        }
             }),
+    
     Knochen_Tür(false, Gegenstand.KNOCHEN, Gegenstand.TÜR, () -> {
         System.out.println("Knochen - Tür Event");
         Projekt42.loader.setPlace(new Raum_2());
             });
+    
     Gegenstand source, target;
     final boolean TargetIsInventory;
     Runnable Action;

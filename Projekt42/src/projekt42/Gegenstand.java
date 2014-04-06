@@ -201,4 +201,8 @@ public enum Gegenstand {
     public void enableToTakeAway(){
         toTakeAway = true;
     }
+    
+    public boolean isToTakeAway(){
+        return toTakeAway;
+    }
 }
