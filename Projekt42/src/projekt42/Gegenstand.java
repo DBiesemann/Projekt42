@@ -12,6 +12,7 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import projekt42.places.Raum_3;
 import utils.GenericDoubleDouble;
 
 /**
@@ -20,19 +21,33 @@ import utils.GenericDoubleDouble;
  */
 public enum Gegenstand {
 
-    KNOCHEN("raum_1/Knochen", "Ein Knochen.", false,
+    KNOCHEN("raum_1/Knochen", "Ein Knochen.", false, null,
             new String[]{"Der ist heiß", "Ich sollte ihn nicht anfassen", "Ich brauche etwas um ihn aus dem Feuer zu holen"},
-            "raum_1/Knochen", "raum_1/Knochen_Inv"),
+            "raum_1/Knochen_Feuer", "raum_1/Knochen", "raum_1/Knochen_Inv"),
 
-    TUCH("raum_1/Tuch", "Ein Tuch.", true,
+    TUCH("raum_1/Tuch", "Ein Tuch.", true, null,
             new String[]{"Ein Tuch, das könnte nützlich sein"},
             "raum_1/Tuch", "raum_1/Tuch_Inv"),
     
-    TÜR("raum_1/Tür", "Eine Tür.", false,
+    TÜR("raum_1/Tür", "Eine Tür.", false, null,
             new String[]{"Die Tür ist verschlossen"},
             "raum_1/Tür"),
+    
+    TÜR_VERSCHLOSSEN("raum_2/Tür_verschlossen", "Verschlossene Tür", false, null,
+            new String[]{"Die Tür ist verschlossen, vielleicht finde ich noch einen Schlüssel"},
+            "raum_2/Tür_verschlossen"),
+    
+    TÜR_OFFEN("raum_2/Tür_offen", "Offene Tür", false, () -> {
+                Projekt42.loader.setPlace(new Raum_3());
+            },
+            new String[]{"Mal sehen, was sich dort finden lässt..."},
+            "raum_2/Tür_offen"),
+    
+    ALIEN("raum_2/Alien", "Ein Alien", false, null,
+            new String[]{"Eine Wache, ich sollte sie nicht wecken", "Es wäre besser es am schlafen zu lassen"},
+            "raum_2/Alien"),
 
-    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true,
+    SCHLUESSEL_1("Schlüssel", "Ein Schlüssel.", true, null,
             new String[]{"Ein goldener Schlüssel..."},
             "keyInv", "keyTestScene", "keyEbene");
     
@@ -41,11 +56,13 @@ public enum Gegenstand {
     HashMap<String, Image> Images;
     String name, tip, firstImageName;
     String[] textboxinfo;
+    Runnable onClickAction;
     private boolean toTakeAway;
 
-    Gegenstand(String Name, String tooltip, boolean ToTakeAway, String[] tboxInfo, String... pImages) {
+    Gegenstand(String Name, String tooltip, boolean ToTakeAway, Runnable onClickAction, String[] tboxInfo, String... pImages) {
         firstImageName = pImages[0];
         textboxinfo = tboxInfo;
+        this.onClickAction = onClickAction;
         Images = new HashMap<>(pImages.length, 1.0f);
         for (String cur : pImages) {
             Images.put(cur,
@@ -112,6 +129,9 @@ public enum Gegenstand {
                     imgView.setTranslateY(0);
                     imgView.setOpacity(1);
                     imgView.setMouseTransparent(false);
+                }
+                if(onClickAction!=null){
+                    onClickAction.run();
                 }
             });
 

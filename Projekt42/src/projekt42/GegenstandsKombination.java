@@ -5,6 +5,8 @@
  */
 package projekt42;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import projekt42.places.Raum_2;
 
 /**
@@ -16,6 +18,8 @@ public enum GegenstandsKombination {
     Tuch_Knochen(false, Gegenstand.TUCH, Gegenstand.KNOCHEN, () -> {
         System.out.println("Knochen - Tuch Event");
         Gegenstand.KNOCHEN.enableToTakeAway();
+        Projekt42.Gegenstaende.getChildren().remove(2);//Index = 2, weil der Knochen im Laden als zweites hinzugefügt wurde in die Group
+        Projekt42.Gegenstaende.getChildren().add(Gegenstand.KNOCHEN.getImageView(Gegenstand.KNOCHEN.name));
             }),
     Knochen_Tür(false, Gegenstand.KNOCHEN, Gegenstand.TÜR, () -> {
         System.out.println("Knochen - Tür Event");
